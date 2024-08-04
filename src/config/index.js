@@ -9,8 +9,8 @@ const mongoOptions = {
     autoIndex: false
 }
 
-// const allowedOrigins = ['https://photo-frontend.vercel.app']
-const allowedOrigins = ['https://spk-kucing-frontend.vercel.app']
+const allowedOrigins = ['http://localhost:5173']
+// const allowedOrigins = ['https://spk-kucing-frontend.vercel.app']
 
 if (process.env.NODE_DEV === 'development') {
     allowedOrigins.push('*')

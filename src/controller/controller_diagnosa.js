@@ -30,7 +30,7 @@ const create = async (req, res) => {
         const result = await classify(decisionTree, req.body)
         console.log(result)
         if (result === "Unknown") {
-            response = { ...requestResponse.server_error }
+            response = { ...requestResponse.incomplete_body, result }
         } else {
             req.body.IDPENYAKIT = result
             const data = await service.create(req.body)
