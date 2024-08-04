@@ -5,15 +5,24 @@ const mongo = require('./database/mongo')
 const logger = require('./utils/logger')
 const cookies = require('cookie-parser')
 const { cors } = require('./config/index')
-const { requestResponse } = require('./utils/index')
 
-const connectionDatabase = async () => {
-    await mongo.createConnection().then((_) => {
-        logger.info(`SUCCESS CONNECTING TO DATABASE MONGODB`)
-    }).catch((err) => {
-        console.error(err)
-    })
-}
+const connectionDatabase = async (retries = 5, delay = 3000) => {
+    for (let i = 0; i < retries; i++) {
+        try {
+            await mongo.createConnection();
+            logger.info(`SUCCESS CONNECTING TO DATABASE MONGODB`);
+            return;
+        } catch (err) {
+            logger.error(`Error connecting to database. Retry ${i + 1}/${retries}`, err);
+            if (i < retries - 1) {
+                await new Promise(res => setTimeout(res, delay));
+            } else {
+                logger.error(`Could not connect to database after ${retries} retries`);
+                process.exit(1); // Exit process after all retries fail
+            }
+        }
+    }
+};
 
 connectionDatabase()
 
