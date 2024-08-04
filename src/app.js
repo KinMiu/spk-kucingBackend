@@ -7,11 +7,15 @@ const cookies = require('cookie-parser')
 const { cors } = require('./config/index')
 const { requestResponse } = require('./utils/index')
 
-mongo.createConnection().then((_) => {
-    logger.info(`SUCCESS CONNECTING TO DATABASE MONGODB`)
-}).catch((err) => {
-    console.error(err)
-})
+const connectionDatabase = async () => {
+    await mongo.createConnection().then((_) => {
+        logger.info(`SUCCESS CONNECTING TO DATABASE MONGODB`)
+    }).catch((err) => {
+        console.error(err)
+    })
+}
+
+connectionDatabase()
 
 const app = express()
 
